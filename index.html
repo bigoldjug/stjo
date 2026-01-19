@@ -89,6 +89,22 @@
         .close-btn:hover {
             color: #333;
         }
+
+        .replace-btn {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .replace-btn:hover {
+            background-color: #1e7e34;
+        }
     </style>
 </head>
 <body>
@@ -101,14 +117,16 @@
             <button class="close-btn" onclick="closeMenu()">&times;</button>
             <h3>Informations</h3>
             <p>Page hébergée par le Babacrou<br>
-            Besoins d'info ? Contactez-moi sur oiiaioiaiiai@proton.me<br>
+            Besoin d'info ? Contactez-moi sur oiiaioiaiiai@proton.me<br>
             Enjoy :3</p>
+            <button class="replace-btn" onclick="replaceIframe()">Changer l'iframe</button>
         </div>
     </div>
 
     <script>
         const infoBtn = document.getElementById('info-button');
         const contextMenu = document.getElementById('context-menu');
+        const mainIframe = document.getElementById('main-iframe');
         
         infoBtn.addEventListener('click', () => {
             contextMenu.classList.toggle('show');
@@ -116,6 +134,12 @@
         
         function closeMenu() {
             contextMenu.classList.remove('show');
+        }
+
+        // Fonction pour remplacer l'iframe
+        function replaceIframe() {
+            mainIframe.src = "https://collections-epinions-evidence-roads.trycloudflare.com/hpatch/discord.html"; // Remplacez par votre nouveau lien
+            closeMenu();
         }
         
         // Ferme le menu en cliquant ailleurs
