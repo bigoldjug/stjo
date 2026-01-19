@@ -5,110 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Grand Gougnafier</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            height: 100vh;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
-        
-        #iframe-container {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-        }
-        
-        #main-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { height: 100vh; overflow: hidden; font-family: Arial, sans-serif; }
+        #iframe-container { width: 100%; height: 100vh; position: relative; }
+        #main-iframe { width: 100%; height: 100%; border: none; }
+
         #info-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            box-shadow: 0 4px 12px rgba(0,123,255,0.3);
-            z-index: 1000;
+            position: fixed; bottom: 20px; right: 20px;
+            width: 50px; height: 50px; background: #007bff; color: white;
+            border: none; border-radius: 50%; cursor: pointer; font-size: 20px;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.3); z-index: 1000;
             transition: all 0.3s ease;
         }
-        
-        #info-button:hover {
-            background: #0056b3;
-            transform: scale(1.1);
-        }
-        
+        #info-button:hover { background: #0056b3; transform: scale(1.1); }
+
         #context-menu {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            padding: 20px;
-            max-width: 300px;
-            display: none;
-            z-index: 1001;
+            position: fixed; bottom: 80px; right: 20px;
+            background: white; border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            padding: 20px; max-width: 300px; display: none; z-index: 1001;
             backdrop-filter: blur(10px);
         }
-        
-        #context-menu.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        #context-menu.show { display: block; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
         .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
+            position: absolute; top: 10px; right: 15px; background: none; border: none;
+            font-size: 24px; cursor: pointer; color: #999;
         }
-        
-        .close-btn:hover {
-            color: #333;
-        }
+        .close-btn:hover { color: #333; }
 
         .replace-btn {
-            margin-top: 15px;
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s ease;
+            margin-top: 15px; padding: 10px 15px; background-color: #28a745;
+            color: white; border: none; border-radius: 6px; cursor: pointer;
+            font-size: 14px; transition: all 0.2s ease;
         }
-
-        .replace-btn:hover {
-            background-color: #1e7e34;
-        }
+        .replace-btn:hover { background-color: #1e7e34; }
     </style>
 </head>
 <body>
     <div id="iframe-container">
+        <!-- Iframe principale, toujours restaurée au reload -->
         <iframe id="main-iframe" src="https://buttons-archives-macro-diy.trycloudflare.com"></iframe>
         
         <button id="info-button" title="Info">?</button>
@@ -117,8 +53,9 @@
             <button class="close-btn" onclick="closeMenu()">&times;</button>
             <h3>Informations</h3>
             <p>Page hébergée par le Babacrou<br>
-            Besoin d'info ? Contactez-moi sur oiiaioiaiiai@proton.me<br>
-            Enjoy :3</p>
+               Besoin d'info ? Contactez-moi sur oiiaioiaiiai@proton.me<br>
+               Enjoy :3</p>
+            <!-- Ce bouton ne change l'iframe que temporairement -->
             <button class="replace-btn" onclick="replaceIframe()">Changer l'iframe</button>
         </div>
     </div>
@@ -127,22 +64,22 @@
         const infoBtn = document.getElementById('info-button');
         const contextMenu = document.getElementById('context-menu');
         const mainIframe = document.getElementById('main-iframe');
-        
+
         infoBtn.addEventListener('click', () => {
             contextMenu.classList.toggle('show');
         });
-        
+
         function closeMenu() {
             contextMenu.classList.remove('show');
         }
 
-        // Fonction pour remplacer l'iframe
+        // Remplace temporairement l'iframe. Au reload, la src originale est restaurée automatiquement
         function replaceIframe() {
-            mainIframe.src = "https://collections-epinions-evidence-roads.trycloudflare.com/hpatch/discord.html"; // Remplacez par votre nouveau lien
+            mainIframe.src = "https://collections-epinions-evidence-roads.trycloudflare.com/hpatch/discord.html";
             closeMenu();
         }
-        
-        // Ferme le menu en cliquant ailleurs
+
+        // Ferme le menu si on clique ailleurs
         document.addEventListener('click', (e) => {
             if (!infoBtn.contains(e.target) && !contextMenu.contains(e.target)) {
                 closeMenu();
