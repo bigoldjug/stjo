@@ -34,12 +34,15 @@
         }
         .close-btn:hover { color: #333; }
 
-        .replace-btn {
-            margin-top: 15px; padding: 10px 15px; background-color: #28a745;
-            color: white; border: none; border-radius: 6px; cursor: pointer;
-            font-size: 14px; transition: all 0.2s ease;
+        .replace-btn, .reset-btn {
+            margin-top: 15px; padding: 10px 15px;
+            border: none; border-radius: 6px; cursor: pointer;
+            font-size: 14px; transition: all 0.2s ease; color: white;
         }
+        .replace-btn { background-color: #28a745; }
         .replace-btn:hover { background-color: #1e7e34; }
+        .reset-btn { background-color: #dc3545; }
+        .reset-btn:hover { background-color: #a71d2a; }
     </style>
 </head>
 <body>
@@ -55,8 +58,10 @@
             <p>Page hébergée par le Babacrou<br>
                Besoin d'info ? Contactez-moi sur oiiaioiaiiai@proton.me<br>
                Enjoy :3</p>
-            <!-- Ce bouton ne change l'iframe que temporairement -->
+            <!-- Bouton temporaire -->
             <button class="replace-btn" onclick="replaceIframe()">Changer l'iframe</button>
+            <!-- Bouton pour remettre l'iframe principale -->
+            <button class="reset-btn" onclick="resetIframe()">Remettre l'iframe principale</button>
         </div>
     </div>
 
@@ -64,6 +69,9 @@
         const infoBtn = document.getElementById('info-button');
         const contextMenu = document.getElementById('context-menu');
         const mainIframe = document.getElementById('main-iframe');
+
+        // Stocke l'URL originale pour pouvoir la remettre
+        const originalIframeSrc = mainIframe.src;
 
         infoBtn.addEventListener('click', () => {
             contextMenu.classList.toggle('show');
@@ -73,9 +81,15 @@
             contextMenu.classList.remove('show');
         }
 
-        // Remplace temporairement l'iframe. Au reload, la src originale est restaurée automatiquement
+        // Remplace temporairement l'iframe
         function replaceIframe() {
             mainIframe.src = "https://collections-epinions-evidence-roads.trycloudflare.com/hpatch/discord.html";
+            closeMenu();
+        }
+
+        // Remet l'iframe principale sans recharger la page
+        function resetIframe() {
+            mainIframe.src = originalIframeSrc;
             closeMenu();
         }
 
