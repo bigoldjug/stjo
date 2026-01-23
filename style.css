@@ -72,6 +72,9 @@ h1 {
 .curseforge {
   background: linear-gradient(135deg, #f16436, #ff7846);
 }
+img{
+  image-rendering: pixelated;
+}
 
 .modrinth {
   background: linear-gradient(135deg, #1bd96a, #17b85a);
