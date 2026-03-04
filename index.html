@@ -58,7 +58,7 @@ async function login() {
 
     try {
         // Exemple de fichier JSON local : [{"username":"test","password":"1234"}]
-        const res = await fetch('/users.json');
+        const res = await fetch('/stjo/users.json');
         const users = await res.json();
 
         const valid = users.some(u => u.username === user && u.password === pass);
