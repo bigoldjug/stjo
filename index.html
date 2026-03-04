@@ -10,34 +10,66 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #f4f4f4;
+        background-color: #121212;
+        color: #e0e0e0;
         font-family: Arial, sans-serif;
     }
+
     .login-box {
-        background: white;
+        background: #1e1e1e;
         padding: 30px;
         border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.6);
         text-align: center;
         width: 300px;
     }
+
     input {
         display: block;
         width: 90%;
         margin: 10px auto;
-        padding: 8px;
-        border: 1px solid #ccc;
+        padding: 10px;
+        border: 1px solid #333;
+        background-color: #2c2c2c;
+        color: #e0e0e0;
         border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
     }
+
+    input:focus {
+        border-color: #1f6feb;
+        outline: none;
+        background-color: #333;
+    }
+
     button {
         padding: 10px 20px;
         border: none;
-        background-color: #007bff;
+        background-color: #1f6feb;
         color: white;
         border-radius: 5px;
         cursor: pointer;
+        font-size: 15px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
     }
-    button:hover { background-color: #0056b3; }
+
+    button:hover {
+        background-color: #1a4fbf;
+        transform: scale(1.05);
+    }
+
+    h2 {
+        margin-bottom: 15px;
+        color: #f0f0f0;
+    }
+
+    #error {
+        margin-top: 10px;
+        color: #ff6b6b;
+        font-size: 14px;
+    }
 </style>
 </head>
 <body>
@@ -47,13 +79,13 @@
     <input type="text" id="username" placeholder="Nom d'utilisateur">
     <input type="password" id="password" placeholder="Mot de passe">
     <button onclick="login()">Se connecter</button>
-    <p id="error" style="color:red"></p>
+    <p id="error"></p>
 </div>
 
 <script>
 async function login() {
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
     const errorEl = document.getElementById('error');
 
     try {
@@ -64,7 +96,6 @@ async function login() {
         const valid = users.some(u => u.username === user && u.password === pass);
 
         if (valid) {
-            // Si valide, on "déverrouille" la page (par ex. afficher l’iframe)
             window.location.href = 'interstellar.html'; 
         } else {
             errorEl.textContent = "Identifiants incorrects.";
