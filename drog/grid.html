@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Grille Infinie - Écriture Intelligente</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    background: #f0f0f0;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #grid-container {
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    background: #fff;
+    border: 1px solid #ddd;
+    overflow: auto;
+    margin-top: 60px;
+  }
+  .cell {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+  }
+  .cell textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    color: #000;
+    padding: 0;
+    margin: 0;
+    resize: none;
+    cursor: text;
+  }
+  .cell textarea:focus {
+    outline: 1px solid #007cba;
+    background: #eef6fb;
+  }
+  #header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(255,255,255,0.95);
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+  }
+  #info {
+    font-size: 14px;
+  }
+  #position {
+    background: rgba(0,123,186,0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div id="header">
+  <div id="info">Cellule pleine → écriture auto suivante | Backspace supprime+← | Clic partout | Flèches</div>
+  <div id="position">X: 0, Y: 0</div>
+</div>
+<div id="grid-container"></div>
+
+<script>
+  const container = document.getElementById('grid-container');
+  const cellSize = 14;
+  const cells = new Map();
+  let currentX = 0;
+  let currentY = 0;
+
+  function getKey(x, y) {
+    return `${x},${y}`;
+  }
+
+  function createCell(x, y) {
+    const key = getKey(x, y);
+    if (cells.has(key)) return cells.get(key);
+
+    const cellDiv = document.createElement('div');
+    cellDiv.className = 'cell';
+    cellDiv.dataset.x = x;
+    cellDiv.dataset.y = y;
+    cellDiv.style.left = (x * cellSize) + 'px';
+    cellDiv.style.top = (y * cellSize) + 'px';
+
+    const textarea = document.createElement('textarea');
+    textarea.maxLength = 1;
+
+    // ✅ ÉCRITURE INTELLIGENTE : si cellule pleine → écrire dans la suivante
+    textarea.addEventListener('beforeinput', (e) => {
+      if (textarea.value.length === 1) {
+        e.preventDefault(); // Empêche d'écraser
+        const newChar = e.data;
+        if (newChar) {
+          // Écrire le nouveau caractère dans la cellule droite
+          setTimeout(() => {
+            const nextX = parseInt(cellDiv.dataset.x) + 1;
+            const nextY = parseInt(cellDiv.dataset.y);
+            moveTo(nextX, nextY);
+            const nextTextarea = cells.get(getKey(nextX, nextY));
+            if (nextTextarea) {
+              nextTextarea.value = newChar;
+              nextTextarea.dispatchEvent(new Event('input'));
+            }
+          }, 0);
+        }
+      }
+    });
+
+    textarea.addEventListener('keydown', (e) => {
+      const cx = parseInt(cellDiv.dataset.x);
+      const cy = parseInt(cellDiv.dataset.y);
+
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        if (textarea.value) {
+          // Supprime ET va à gauche
+          textarea.value = '';
+          moveTo(cx - 1, cy);
+        } else {
+          moveTo(cx - 1, cy);
+        }
+        return;
+      }
+
+      switch(e.key) {
+        case 'ArrowRight': e.preventDefault(); moveTo(cx + 1, cy); break;
+        case 'ArrowLeft': e.preventDefault(); moveTo(cx - 1, cy); break;
+        case 'ArrowUp': e.preventDefault(); moveTo(cx, cy - 1); break;
+        case 'ArrowDown': e.preventDefault(); moveTo(cx, cy + 1); break;
+      }
+    });
+
+    textarea.addEventListener('focus', () => {
+      currentX = parseInt(cellDiv.dataset.x);
+      currentY = parseInt(cellDiv.dataset.y);
+      updatePosition();
+    });
+
+    cellDiv.appendChild(textarea);
+    container.appendChild(cellDiv);
+    cells.set(key, textarea);
+    return textarea;
+  }
+
+  function moveTo(x, y) {
+    createCell(x, y);
+    const textarea = cells.get(getKey(x, y));
+    currentX = x;
+    currentY = y;
+    updatePosition();
+    textarea.focus();
+    textarea.setSelectionRange(1, 1);
+    scrollToCell(x, y);
+  }
+
+  function updatePosition() {
+    document.getElementById('position').textContent = `X: ${currentX}, Y: ${currentY}`;
+  }
+
+  function scrollToCell(x, y) {
+    const left = x * cellSize;
+    const top = y * cellSize;
+    const viewLeft = container.scrollLeft;
+    const viewTop = container.scrollTop;
+    const viewWidth = container.clientWidth;
+    const viewHeight = container.clientHeight;
+
+    if (left < viewLeft) {
+      container.scrollLeft = left;
+    } else if (left + cellSize > viewLeft + viewWidth) {
+      container.scrollLeft = left - viewWidth + cellSize;
+    }
+
+    if (top < viewTop) {
+      container.scrollTop = top;
+    } else if (top + cellSize > viewTop + viewHeight) {
+      container.scrollTop = top - viewHeight + cellSize;
+    }
+  }
+
+  // Grille initiale 30x30
+  for (let y = -15; y < 15; y++) {
+    for (let x = -15; x < 15; x++) {
+      createCell(x, y);
+    }
+  }
+
+  moveTo(0, 0);
+
+  // Extension infinie au scroll
+  let scrollTimeout;
+  container.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const scrollX = container.scrollLeft;
+      const scrollY = container.scrollTop;
+      const viewW = container.clientWidth;
+      const viewH = container.clientHeight;
+
+      const minX = Math.floor(scrollX / cellSize) - 5;
+      const maxX = Math.ceil((scrollX + viewW) / cellSize) + 5;
+      const minY = Math.floor(scrollY / cellSize) - 5;
+      const maxY = Math.ceil((scrollY + viewH) / cellSize) + 5;
+
+      for (let y = minY; y <= maxY; y++) {
+        for (let x = minX; x <= maxX; x++) {
+          createCell(x, y);
+        }
+      }
+    }, 100);
+  });
+</script>
+</body>
+</html>

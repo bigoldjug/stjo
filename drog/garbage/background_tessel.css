@@ -1,0 +1,39 @@
+html {
+	--sz: 8px;
+	--c1: #30bd71;
+	--c2: #006a60;
+	--ts: 50%/ calc(var(--sz) * 31) calc(var(--sz) * 31);
+	margin: 0;
+	padding: 0;
+	height: 100vh;
+	overflow: hidden;
+	--rad: #fff0 0 calc(var(--sz) * 1), 
+		var(--c2) calc(calc(var(--sz) * 1) + 1px) calc(var(--sz) * 2),
+		#fff0 calc(calc(var(--sz) * 2) + 1px) calc(var(--sz) * 3),			
+		var(--c2) calc(calc(var(--sz) * 3) + 1px) calc(var(--sz) * 3.9),
+		#fff0 calc(calc(var(--sz) * 3.9) + 1px) calc(var(--sz) * 4.9),
+		var(--c2) calc(calc(var(--sz) * 4.9) + 1px) calc(var(--sz) * 5.7),
+		#fff0 calc(calc(var(--sz) * 5.7) + 1px) calc(var(--sz) * 6.7),
+		var(--c2) calc(calc(var(--sz) * 6.7) + 1px) calc(var(--sz) * 7.4),
+		#fff0 calc(calc(var(--sz) * 7.4) + 1px) calc(var(--sz) * 8.3),
+		var(--c2) calc(calc(var(--sz) * 8.3) + 1px) calc(var(--sz) * 8.9),
+		#fff0 calc(calc(var(--sz) * 8.9) + 1px) calc(var(--sz) * 9.7),
+		var(--c2) calc(calc(var(--sz) * 9.7) + 1px) calc(var(--sz) * 10.2),
+		#fff0 calc(calc(var(--sz) * 10.2) + 1px) calc(var(--sz) * 10.9),
+		var(--c2) calc(calc(var(--sz) * 10.9) + 1px) calc(var(--sz) * 11.2),
+		#fff0 calc(calc(var(--sz) * 11.2) + 1px) calc(var(--sz) * 11.9),
+		var(--c2) calc(calc(var(--sz) * 11.9) + 1px) calc(var(--sz) * 12.2),
+		#fff0 calc(calc(var(--sz) * 12.2) + 1px) calc(var(--sz) * 12.9),
+		var(--c2) calc(calc(var(--sz) * 12.9) + 1px) calc(var(--sz) * 13.2),
+		#fff0 calc(calc(var(--sz) * 13.2) + 1px) calc(var(--sz) * 13.9),
+		var(--c2) calc(calc(var(--sz) * 13.9) + 1px) calc(var(--sz) * 14.2),
+		#fff0 calc(calc(var(--sz) * 14.2) + 1px) calc(var(--sz) * 14.9),
+		var(--c2) calc(calc(var(--sz) * 14.9) + 1px) calc(var(--sz) * 15.2),
+		#fff0 calc(calc(var(--sz) * 15.2) + 1px) 100%;
+	background:
+		radial-gradient(circle at 50% 0%, var(--rad)) var(--ts),
+		radial-gradient(circle at 50% 100%, var(--rad)) var(--ts),
+		radial-gradient(circle at 0% 50%, var(--rad)) var(--ts),
+		radial-gradient(circle at 100% 50%, var(--rad)) var(--ts),
+		var(--c1);
+}

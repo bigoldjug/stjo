@@ -1,0 +1,193 @@
+
+
+@import "https://unpkg.com/osc-css";
+
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    animation: var(--osc);
+
+    /* incorporating primes to repeat less often */
+    --osc-sin-frequency: calc(1 / 30);
+    --osc-saw-frequency: calc(1 / 50);
+    --osc-cos-frequency: calc(1 / 70);
+
+    /* change blend for other interesting aesthetics */
+    background-blend-mode: screen;
+
+    /* using fractions to make it easier to play around with */
+    background-size: 
+      calc(100% / 1) calc(100% / 7),
+      calc(100% / 5) calc(100% / 3),
+      calc(100% / 7) calc(100% / 1)
+    ;
+
+    background-image: repeating-conic-gradient(
+        from calc(var(--osc-saw) * 90deg) in display-p3,
+        red 30deg,
+        green 60deg,
+        blue 90deg
+      ),
+      repeating-conic-gradient(
+        from calc(var(--osc-cos) * 180deg) in display-p3,
+        red 60deg,
+        green 120deg,
+        blue 180deg
+      ),
+      repeating-conic-gradient(
+        from calc(var(--osc-sin) * 360deg) in display-p3,
+        red 90deg,
+        green 180deg,
+        blue 270deg
+      );
+  }
+}
+
+@layer support {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  body,
+  html {
+    block-size: 100%;
+    color-scheme: dark light;
+  }
+}
+
+
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
+
+$bg-color: #F3F3F3;
+$title-color: #ff0052;
+$text-color: #250001;
+$link-color: #ff0052;
+$cubic-bezier: cubic-bezier(0.83, 0, 0.17, 1);
+$second-glass-gap: 8px;
+
+body {
+	background-color: $bg-color;
+	font-family: 'Poppins', sans-serif;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: $title-color;
+}
+
+a {
+	color: $link-color;
+	text-decoration: none;
+	font-weight: 600;
+	transition: all 0.2s $cubic-bezier;
+	
+	&:hover {
+		color: $text-color;
+	}
+}
+
+main.container {
+	position: relative;
+	.square, .round {
+		position: absolute;
+		width: 200px;
+		height: 200px;
+	}
+	
+	.square {
+		bottom: 0%;
+		border-radius: 25px;
+		background-color: #00DBDE;
+		background-image: linear-gradient(90deg, #00DBDE 0%, #FC00FF 100%);
+		animation: moveAnimation 6s $cubic-bezier infinite alternate;
+	}
+
+	.round {
+		top: 0%;
+    transform: translateY(-50%);
+		border-radius: 5000px;
+		background-color: #FFE53B;
+		background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+		animation: moveAnimation2 6s $cubic-bezier infinite alternate;
+	}
+	
+	section.glass-container {
+		background: repeating-linear-gradient(27deg, rgba(255,255,255,0.2) 0px, rgba(150,150,150,0.2) 125px, rgba(255,255,255,0.2) 195px);
+    border-radius: 12px;
+    backdrop-filter: blur(20px) brightness(1.2);
+		width: 100%;
+    max-width: 600px;
+    height: 100vh;
+		max-height: 275px;
+    padding: 24px;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1), 0 1px 12px rgba(0, 0, 0, 0.1);
+		border: 1px solid rgba(255,255,255,0.2);
+		display: flex;
+		
+		&::before {
+			content: "";
+			position: absolute;
+			top: $second-glass-gap;
+			left: $second-glass-gap;
+			right: $second-glass-gap;
+			bottom: $second-glass-gap;
+			border-radius: $second-glass-gap;
+			backdrop-filter: blur(10px);
+			opacity: 0.5;
+		}
+		
+		.content {
+			z-index: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			
+			h1.hero-title {
+				font-family: 'Pacifico', serif;
+				font-size: 4rem;
+				margin: 1rem;
+			}
+
+			p.hero-text {
+				font-size: 1.2em;
+				font-weight: 500;
+			}
+
+			p.credit {
+				color: #546E7A;
+			}
+		}
+	}
+}
+
+@keyframes moveAnimation {
+	0% {
+		bottom: 10%;
+		right: 75%;
+		transform: rotate(45deg);
+	}
+	100% {
+		bottom: -5%;
+		right: -10%;
+		transform: rotate(127deg);
+	}
+}
+
+@keyframes moveAnimation2 {
+	0% {
+		top: 25%;
+		left: 75%;
+		transform: rotate(127deg);
+	}
+	100% {
+		top: -15%;
+		left: -15%;
+		transform: rotate(45deg);
+	}
+}
